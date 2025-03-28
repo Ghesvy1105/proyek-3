@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,6 +8,7 @@
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
+
 <body style="background-color: #f8f9fa;">
     <div class="container mt-5">
         <div class="card shadow-lg">
@@ -36,7 +38,7 @@
 
                 <!-- Menampilkan status pembayaran -->
                 <p><strong>Status Pembayaran:</strong>
-                    @if($order->payment_status == 'belum_bayar')
+                    @if ($order->payment_status == 'belum_bayar')
                         <span class="badge bg-danger">Belum Bayar</span>
                     @else
                         <span class="badge bg-success">Sudah Bayar</span>
@@ -44,7 +46,7 @@
                 </p>
 
                 <!-- Tombol untuk mengubah status pembayaran (untuk penjual) -->
-                @if($order->payment_status == 'belum_bayar')
+                @if ($order->payment_status == 'belum_bayar')
                     <form action="{{ route('orders.updatePayment', $order->id) }}" method="POST">
                         @csrf
                         @method('PATCH')
@@ -62,7 +64,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach(json_decode($order->items) as $item)
+                        @foreach (json_decode($order->items) as $item)
                             <tr>
                                 <td>{{ $item->name }}</td>
                                 <td>Rp {{ number_format($item->price, 0, ',', '.') }}</td>
@@ -82,4 +84,5 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>

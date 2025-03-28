@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 use App\Models\Product;
+use Illuminate\Support\Str;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
@@ -20,7 +22,7 @@ class ProductController extends Controller
     {
         $foods = Product::where('category', 'makanan')->get(); // Mengambil produk kategori makanan
         $drinks = Product::where('category', 'minuman')->get(); // Mengambil produk kategori minuman
-        
+
         // Mengirim data makanan dan minuman ke view 'menu'
         return view('menu', compact('foods', 'drinks'));
     }
@@ -39,7 +41,8 @@ class ProductController extends Controller
             'name' => 'required|string|max:255',
             'price' => 'required|numeric',
             'image' => 'required|image|mimes:jpeg,png,jpg,gif',
-            'category' => 'required|in:makanan,minuman', // Validasi category
+            'category' => 'required|in:makanan,minuman', // Validasi category,
+            'in_stock' => 'required|integer|min:0', // Validasi in_stock
         ]);
 
         // Simpan gambar ke storage
@@ -48,11 +51,12 @@ class ProductController extends Controller
             $request->file('image')->getClientOriginalName(), // Nama file asli
             'public' // Disk
         );
-                Product::create([
+        Product::create([
             'name' => $request->name,
             'price' => $request->price,
             'image' => $imagePath,
             'category' => $request->category, // Menambahkan category
+            'in_stock' => $request->in_stock, // Menambahkan in_stock
         ]);
 
         return redirect()->route('products.index')->with('success', 'Produk berhasil ditambahkan');
@@ -74,27 +78,26 @@ class ProductController extends Controller
             'price' => 'required|numeric',
             'image' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
             'category' => 'required|in:makanan,minuman', // Validasi category
+            'in_stock' => 'required|integer|min:0', // Validasi in_stock
         ]);
 
         // Ambil produk yang akan di-update
         $product = Product::findOrFail($id);
-
         // Cek apakah ada gambar baru yang di-upload
         if ($request->hasFile('image')) {
             // Hapus gambar lama jika ada
-            if ($product->image) {
+            if (!empty($product->image)) {
                 Storage::disk('public')->delete($product->image);
             }
 
             // Simpan gambar baru
             $imagePath = $request->file('image')->storeAs(
-                'images', // Folder penyimpanan
+                'images', // Folder penyimpanan dalam storage/app/public
                 $request->file('image')->getClientOriginalName(), // Nama file asli
-                'public' // Disk
-            );        
+                'public' // Disk penyimpanan
+            );
         } else {
-            // Jika tidak ada gambar baru, tetap gunakan gambar lama
-            $imagePath = $product->image;
+            $imagePath = Str::after($product->image, 'storage/');
         }
 
         // Update produk dengan category
@@ -103,6 +106,7 @@ class ProductController extends Controller
             'price' => $request->price,
             'image' => $imagePath,
             'category' => $request->category, // Memperbarui category
+            'in_stock' => $request->in_stock, // Memperbarui in_stock
         ]);
 
         return redirect()->route('products.index')->with('success', 'Produk berhasil diperbarui');

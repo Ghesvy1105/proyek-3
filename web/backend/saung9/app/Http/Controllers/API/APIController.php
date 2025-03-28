@@ -90,15 +90,19 @@ class APIController extends Controller
             return response()->json(['status' => false, 'message' => 'Keranjang kosong'], 400);
         }
 
+        $items = $cartItems->map(function ($item) {
+            return [
+                'name' => $item->product->name,
+                'price' => $item->product->price,
+                'quantity' => $item->quantity
+            ];
+        });
+
         $order = Order::create([
             'user_id' => Auth::id(),
             'customer_name' => Auth::user()->name,
             'table_number' => $request->table_number,
-            'items' => $cartItems->map(fn($item) => [
-                'product_id' => $item->product_id,
-                'quantity' => $item->quantity,
-                'price' => $item->product->price
-            ])->toArray(),
+            'items' => json_encode($items),
             'total_price' => $cartItems->sum(fn($item) => $item->quantity * $item->product->price),
             'order_date' => Carbon::now(),
             'is_new' => true,

@@ -13,13 +13,23 @@ class Product extends Model
         'name',
         'price',
         'image',
-        'category', // Tambahkan kolom category
+        'category', // Tambahkan kolom category,
+        'in_stock' // Tambahkan kolom in_stock
     ];
+
+    public function getInStockAttribute($in_stock)
+    {
+        return $in_stock ? true : false;
+    }
 
     //return column image with link
     public function getImageAttribute($image)
     {
-        return asset('storage/' . $image);
+        if ($image) {
+            return asset('storage/' . $image);
+        } else {
+            return $image;
+        }
     }
 
     public function cartItems()

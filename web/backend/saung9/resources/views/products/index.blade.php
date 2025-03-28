@@ -45,6 +45,7 @@
                             <th scope="col">Harga</th>
                             <th scope="col">Kategori</th> <!-- Kolom Kategori Baru -->
                             <th scope="col">Gambar</th>
+                            <th scope="col">Stock</th>
                             <th scope="col">Aksi</th>
                         </tr>
                     </thead>
@@ -55,9 +56,10 @@
                                 <td>{{ number_format($product->price, 0, ',', '.') }}</td>
                                 <td>{{ ucfirst($product->category) }}</td> <!-- Menampilkan Kategori Produk -->
                                 <td>
-                                    <img src="{{ asset($product->image) }}" alt="{{ $product->name }}"
-                                    width="100px">
-
+                                    <img src="{{ $product->image }}" alt="{{ $product->name }}" width="100px">
+                                </td>
+                                <td>
+                                    {{ $product->in_stock ? 'Tersedia' : 'Tidak Tersedia' }}
                                 </td>
                                 <td>
                                     <a href="{{ route('products.edit', $product->id) }}"
