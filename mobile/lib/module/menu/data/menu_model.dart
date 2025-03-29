@@ -11,6 +11,7 @@ class MenuModel with _$MenuModel {
     @Default("") String price,
     @Default("") String image,
     @Default("") String category,
+    @Default(true) bool in_stock,
   }) = _MenuModel;
 
   factory MenuModel.fromJson(Map<String, dynamic> json) =>

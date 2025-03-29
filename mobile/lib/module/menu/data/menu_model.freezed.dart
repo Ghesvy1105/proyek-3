@@ -25,6 +25,7 @@ mixin _$MenuModel {
   String get price => throw _privateConstructorUsedError;
   String get image => throw _privateConstructorUsedError;
   String get category => throw _privateConstructorUsedError;
+  bool get in_stock => throw _privateConstructorUsedError;
 
   /// Serializes this MenuModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -41,7 +42,13 @@ abstract class $MenuModelCopyWith<$Res> {
   factory $MenuModelCopyWith(MenuModel value, $Res Function(MenuModel) then) =
       _$MenuModelCopyWithImpl<$Res, MenuModel>;
   @useResult
-  $Res call({int id, String name, String price, String image, String category});
+  $Res call(
+      {int id,
+      String name,
+      String price,
+      String image,
+      String category,
+      bool in_stock});
 }
 
 /// @nodoc
@@ -64,6 +71,7 @@ class _$MenuModelCopyWithImpl<$Res, $Val extends MenuModel>
     Object? price = null,
     Object? image = null,
     Object? category = null,
+    Object? in_stock = null,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -86,6 +94,10 @@ class _$MenuModelCopyWithImpl<$Res, $Val extends MenuModel>
           ? _value.category
           : category // ignore: cast_nullable_to_non_nullable
               as String,
+      in_stock: null == in_stock
+          ? _value.in_stock
+          : in_stock // ignore: cast_nullable_to_non_nullable
+              as bool,
     ) as $Val);
   }
 }
@@ -98,7 +110,13 @@ abstract class _$$MenuModelImplCopyWith<$Res>
       __$$MenuModelImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({int id, String name, String price, String image, String category});
+  $Res call(
+      {int id,
+      String name,
+      String price,
+      String image,
+      String category,
+      bool in_stock});
 }
 
 /// @nodoc
@@ -119,6 +137,7 @@ class __$$MenuModelImplCopyWithImpl<$Res>
     Object? price = null,
     Object? image = null,
     Object? category = null,
+    Object? in_stock = null,
   }) {
     return _then(_$MenuModelImpl(
       id: null == id
@@ -141,6 +160,10 @@ class __$$MenuModelImplCopyWithImpl<$Res>
           ? _value.category
           : category // ignore: cast_nullable_to_non_nullable
               as String,
+      in_stock: null == in_stock
+          ? _value.in_stock
+          : in_stock // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -153,7 +176,8 @@ class _$MenuModelImpl implements _MenuModel {
       this.name = "",
       this.price = "",
       this.image = "",
-      this.category = ""});
+      this.category = "",
+      this.in_stock = true});
 
   factory _$MenuModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$MenuModelImplFromJson(json);
@@ -173,10 +197,13 @@ class _$MenuModelImpl implements _MenuModel {
   @override
   @JsonKey()
   final String category;
+  @override
+  @JsonKey()
+  final bool in_stock;
 
   @override
   String toString() {
-    return 'MenuModel(id: $id, name: $name, price: $price, image: $image, category: $category)';
+    return 'MenuModel(id: $id, name: $name, price: $price, image: $image, category: $category, in_stock: $in_stock)';
   }
 
   @override
@@ -189,13 +216,15 @@ class _$MenuModelImpl implements _MenuModel {
             (identical(other.price, price) || other.price == price) &&
             (identical(other.image, image) || other.image == image) &&
             (identical(other.category, category) ||
-                other.category == category));
+                other.category == category) &&
+            (identical(other.in_stock, in_stock) ||
+                other.in_stock == in_stock));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode =>
-      Object.hash(runtimeType, id, name, price, image, category);
+      Object.hash(runtimeType, id, name, price, image, category, in_stock);
 
   /// Create a copy of MenuModel
   /// with the given fields replaced by the non-null parameter values.
@@ -219,7 +248,8 @@ abstract class _MenuModel implements MenuModel {
       final String name,
       final String price,
       final String image,
-      final String category}) = _$MenuModelImpl;
+      final String category,
+      final bool in_stock}) = _$MenuModelImpl;
 
   factory _MenuModel.fromJson(Map<String, dynamic> json) =
       _$MenuModelImpl.fromJson;
@@ -234,6 +264,8 @@ abstract class _MenuModel implements MenuModel {
   String get image;
   @override
   String get category;
+  @override
+  bool get in_stock;
 
   /// Create a copy of MenuModel
   /// with the given fields replaced by the non-null parameter values.

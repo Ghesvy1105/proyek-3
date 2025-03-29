@@ -13,6 +13,7 @@ _$MenuModelImpl _$$MenuModelImplFromJson(Map<String, dynamic> json) =>
       price: json['price'] as String? ?? "",
       image: json['image'] as String? ?? "",
       category: json['category'] as String? ?? "",
+      in_stock: json['in_stock'] as bool? ?? true,
     );
 
 Map<String, dynamic> _$$MenuModelImplToJson(_$MenuModelImpl instance) =>
@@ -22,4 +23,5 @@ Map<String, dynamic> _$$MenuModelImplToJson(_$MenuModelImpl instance) =>
       'price': instance.price,
       'image': instance.image,
       'category': instance.category,
+      'in_stock': instance.in_stock,
     };

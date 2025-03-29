@@ -57,14 +57,21 @@ class _ItemMenuState extends ConsumerState<ItemMenu> {
                       child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
                               padding: EdgeInsets.all(0)),
-                          onPressed: () {
-                            ref
-                                .read(summaryProvider.notifier)
-                                .addKeranjang(widget.data);
-                            ApiService().addKeranjang(widget.data.id);
-                          },
+                          onPressed: widget.data.in_stock
+                              ? () {
+                                  ref
+                                      .read(summaryProvider.notifier)
+                                      .addKeranjang(widget.data);
+                                  ApiService().addKeranjang(widget.data.id);
+                                }
+                              : null,
                           child: Icon(Icons.add)),
-                    )
+                    ),
+                    if (!widget.data.in_stock)
+                      Text(
+                        "Tidak Tersedia",
+                        style: TextStyle(color: Colors.red),
+                      )
                   ],
                 ),
               ),
