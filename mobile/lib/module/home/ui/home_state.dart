@@ -21,3 +21,15 @@ class CategoryNotifier extends Notifier<String> {
 
 final categoryProvider =
     NotifierProvider<CategoryNotifier, String>(CategoryNotifier.new);
+
+
+class SearchNotifier extends Notifier<String> {
+  @override
+  String build() => "";
+
+  void setText(String s) => state = s;
+}
+
+final searchProvider =
+    NotifierProvider<SearchNotifier, String>(SearchNotifier.new);
+

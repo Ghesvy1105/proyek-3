@@ -6,13 +6,13 @@ import 'package:biyung/module/keranjang/model/keranjang_model.dart';
 import 'package:biyung/module/menu/data/menu_model.dart';
 import 'package:biyung/module/profile/model/profil_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
+import 'package:dio/dio.dart';
 import 'api_utils.dart';
 
 class ApiService {
   login(em, password) async {
     var data = {"email": em, "password": password};
-    var w = await API.kal().post("/login", data: data).then((r) async {
+    var w = await API.kal().post("http://127.0.0.1:8000/api/login", data: data).then((r) async {
       CommonUtils().showMessage(r.data['message']);
       if (r.data['status']) {
         final SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -32,9 +32,9 @@ class ApiService {
 
   Future<bool> register(name, em, password) async {
     var data = {"name": name, "email": em, "password": password};
-    var w = await API.kal().post("/register", data: data).then((r) {
+    var w = await API.kal().post("http://127.0.0.1:8000/api/register", data: data).then((r) {
       CommonUtils().showMessage(r.data['message']);
-      if (r.data['success']) {
+      if (r.data['status']) {
         // addToken(r.data['token']);
         return true;
       } else {
@@ -46,7 +46,7 @@ class ApiService {
 
   Future<List<MenuModel>> getAllMenu() async {
     try {
-      var res = await API.kal().get("/menu?category=").then((r) {
+      var res = await API.kal().get("http://127.0.0.1:8000/api/menu?category=").then((r) {
         // CommonUtils().showMessage(r.data['message']);
         if (r.data['status']) {
           var list = List.from(r.data['data']);
@@ -63,10 +63,34 @@ class ApiService {
     }
   }
 
+  Future<List<MenuModel>> getRecomendation({String search = "", String category = "ALL"}) async {
+  // final dio = Dio();
+  final response = await API.kal().get('http://127.0.0.1:8000/api/menu', queryParameters: {
+    'search': search,
+    'category': category,
+  });
+
+  if (response.data['status']) {
+    final List data = response.data['data'];
+    return data.map((json) => MenuModel.fromJson(json)).toList();
+  } else {
+    return [];
+  }
+}
+
+Future<void> incrementSearchCount(int id) async {
+  try {
+    await API.kal().post('http://127.0.0.1:8000/api/menu/$id/increment-search');
+  } catch (e) {
+    print('Gagal tambah search count: $e');
+  }
+}
+
+
   Future<bool> addKeranjang(int menu) async {
     var data = {"menu_id": menu, "quantity": 1};
     try {
-      var res = await API.kal().post("/keranjang", data: data).then((r) {
+      var res = await API.kal().post("http://127.0.0.1:8000/api/keranjang", data: data).then((r) {
         // CommonUtils().showMessage(r.data['message']);
         return r.data['status'];
       });
@@ -81,7 +105,7 @@ class ApiService {
     var data = {"menu_id": menu, "quantity": qty};
     try {
       var res =
-          await API.kal().post("/keranjang/$keranjang", data: data).then((r) {
+          await API.kal().post("http://127.0.0.1:8000/api/keranjang/$keranjang", data: data).then((r) {
         // CommonUtils().showMessage(r.data['message']);
         return r.data['status'];
       });
@@ -94,7 +118,7 @@ class ApiService {
 
   Future<bool> hapusKeranjang(int keranjang) async {
     try {
-      var res = await API.kal().delete("/keranjang/$keranjang").then((r) {
+      var res = await API.kal().delete("http://127.0.0.1:8000/api/keranjang/$keranjang").then((r) {
         CommonUtils().showMessage(r.data['message']);
         return r.data['status'];
       });
@@ -107,7 +131,7 @@ class ApiService {
 
   Future<List<KeranjangModel>> getKeranjang() async {
     try {
-      var res = await API.kal().get("/keranjang").then((r) {
+      var res = await API.kal().get("http://127.0.0.1:8000/api/keranjang").then((r) {
         // CommonUtils().showMessage(r.data['message']);
         if (r.data['status']) {
           var list = List.from(r.data['data']);
@@ -127,7 +151,7 @@ class ApiService {
   Future<int> checkout(int meja, String reqs) async {
     var data = {"table_number": meja, "special_requests": reqs};
     try {
-      var res = await API.kal().post("/check-out", data: data).then((r) {
+      var res = await API.kal().post("http://127.0.0.1:8000/api/check-out", data: data).then((r) {
         // CommonUtils().showMessage(r.data['message']);
         return r.data['data']['id'];
       });
@@ -140,7 +164,7 @@ class ApiService {
 
   Future<List<HistoryModel>> listHistory() async {
     try {
-      var res = await API.kal().get("/check-out").then((r) {
+      var res = await API.kal().get("http://127.0.0.1:8000/api/check-out").then((r) {
         if (r.data['status']) {
           var list = List.from(r.data['data']);
           var q = list.map((e) => HistoryModel.fromJson(e)).toList();
@@ -151,7 +175,7 @@ class ApiService {
       });
       return res;
     } catch (ex) {
-      log(ex.toString());
+      log(ex. toString());
       return [];
     }
   }
@@ -159,7 +183,7 @@ class ApiService {
   Future<HistoryModel?> historyDetail(int id) async {
     try {
       log(id.toString());
-      var res = await API.kal().get("/check-out/$id/detail").then((r) {
+      var res = await API.kal().get("http://127.0.0.1:8000/api/check-out/$id/detail").then((r) {
         if (r.data['status']) {
           var q = HistoryModel.fromJson(r.data['data']);
           return q;
@@ -177,7 +201,7 @@ class ApiService {
   Future<bool> editProfil(String email, String nama) async {
     try {
       var data = {"name": nama, "email": email};
-      var res = await API.kal().post("/profile", data: data).then((r) {
+      var res = await API.kal().post("http://127.0.0.1:8000/api/profile", data: data).then((r) {
         CommonUtils().showMessage(r.data['message']);
         return r.data['status'] ?? false;
       });
@@ -190,11 +214,11 @@ class ApiService {
 
   Future<ProfilModel> getProfil() async {
     try {
-      var res = await API.kal().get("/profile").then((r) {
+      var res = await API.kal().get("http://127.0.0.1:8000/api/profile").then((r) {
         // CommonUtils().showMessage(r.data['message']);
         if (r.data['status']) {
           return ProfilModel.fromJson(r.data['data']);
-        }else{
+        } else {
           return ProfilModel();
         }
       });
@@ -207,7 +231,7 @@ class ApiService {
 
   Future<bool> logout() async {
     try {
-      var res = await API.kal().post("/logout").then((r) {
+      var res = await API.kal().post("http://127.0.0.1:8000/api/logout").then((r) {
         CommonUtils().showMessage(r.data['message']);
         return r.data['status'];
       });

@@ -42,10 +42,10 @@ class _LayoutBottomNavState extends ConsumerState<LayoutBottomNav> {
             // if (value == 2) {
             //   context.go("/konfirmasi");
             // }
-            if (value == 2) {
+            if (value == 1) {
               context.go("/keranjang");
             }
-            if (value == 3) {
+            if (value == 2) {
               ref.read(profilProvider.notifier).get();
               context.go("/profil");
             }
@@ -60,21 +60,21 @@ class _LayoutBottomNavState extends ConsumerState<LayoutBottomNav> {
               ),
               label: "",
             ),
-            BottomNavigationBarItem(
-              icon: Image.asset(
-                "assets/icons/chat.png",
-                height: 24,
-                width: 24,
-                color: selected == 1 ? Colors.black : Colors.grey,
-              ),
-              label: "TTS",
-            ),
+            // BottomNavigationBarItem(
+            //   icon: Image.asset(
+            //     "assets/icons/chat.png",
+            //     height: 24,
+            //     width: 24,
+            //     color: selected == 1 ? Colors.black : Colors.grey,
+            //   ),
+            //   label: "TTS",
+            // ),
             BottomNavigationBarItem(
               icon: Image.asset(
                 "assets/icons/document.png",
                 height: 24,
                 width: 24,
-                color: selected == 2 ? Colors.black : Colors.grey,
+                color: selected == 1 ? Colors.black : Colors.grey,
               ),
               label: "Pencarian",
             ),
@@ -83,7 +83,7 @@ class _LayoutBottomNavState extends ConsumerState<LayoutBottomNav> {
                 "assets/icons/profil.png",
                 height: 24,
                 width: 24,
-                color: selected == 3 ? Colors.black : Colors.grey,
+                color: selected == 2 ? Colors.black : Colors.grey,
               ),
               label: "Informasi",
             ),

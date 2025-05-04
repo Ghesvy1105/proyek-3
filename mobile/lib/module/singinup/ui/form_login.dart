@@ -1,5 +1,6 @@
 import 'package:biyung/core/API/api_service.dart';
 import 'package:biyung/core/constant.dart';
+import 'package:biyung/core/layout/bottom_nav_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
@@ -63,7 +64,10 @@ class _FormLoginState extends ConsumerState<FormLogin> {
                   onPressed: () {
                     // context.go("/");
                     ApiService().login(email.text, pass.text).then((v) {
-                      if (v) context.go("/");
+                      if (v) {
+                        ref.read(CurrentNavIndexProvider.notifier).setIdx(0);
+                        context.go("/");
+                      }
                     });
                   },
                   child: Text("Sign In"))),

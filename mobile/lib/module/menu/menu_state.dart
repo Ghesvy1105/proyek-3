@@ -4,5 +4,6 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 final listMenuProvider = FutureProvider.autoDispose<List<MenuModel>>((ref) async {
   var res = await ApiService().getAllMenu();
+  // var res = await ApiService().getRecomendation();
   return res;
 });

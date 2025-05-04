@@ -22,7 +22,7 @@ ItemHistoryModel _$ItemHistoryModelFromJson(Map<String, dynamic> json) {
 mixin _$ItemHistoryModel {
   int get product_id => throw _privateConstructorUsedError;
   int get quantity => throw _privateConstructorUsedError;
-  int get subtotal => throw _privateConstructorUsedError;
+  String get subtotal => throw _privateConstructorUsedError;
   String get product_name => throw _privateConstructorUsedError;
   String get price => throw _privateConstructorUsedError;
 
@@ -45,7 +45,7 @@ abstract class $ItemHistoryModelCopyWith<$Res> {
   $Res call(
       {int product_id,
       int quantity,
-      int subtotal,
+      String subtotal,
       String product_name,
       String price});
 }
@@ -83,7 +83,7 @@ class _$ItemHistoryModelCopyWithImpl<$Res, $Val extends ItemHistoryModel>
       subtotal: null == subtotal
           ? _value.subtotal
           : subtotal // ignore: cast_nullable_to_non_nullable
-              as int,
+              as String,
       product_name: null == product_name
           ? _value.product_name
           : product_name // ignore: cast_nullable_to_non_nullable
@@ -107,7 +107,7 @@ abstract class _$$ItemHistoryModelImplCopyWith<$Res>
   $Res call(
       {int product_id,
       int quantity,
-      int subtotal,
+      String subtotal,
       String product_name,
       String price});
 }
@@ -143,7 +143,7 @@ class __$$ItemHistoryModelImplCopyWithImpl<$Res>
       subtotal: null == subtotal
           ? _value.subtotal
           : subtotal // ignore: cast_nullable_to_non_nullable
-              as int,
+              as String,
       product_name: null == product_name
           ? _value.product_name
           : product_name // ignore: cast_nullable_to_non_nullable
@@ -162,7 +162,7 @@ class _$ItemHistoryModelImpl implements _ItemHistoryModel {
   _$ItemHistoryModelImpl(
       {this.product_id = 0,
       this.quantity = 0,
-      this.subtotal = 0,
+      this.subtotal = "",
       this.product_name = "",
       this.price = ""});
 
@@ -177,7 +177,7 @@ class _$ItemHistoryModelImpl implements _ItemHistoryModel {
   final int quantity;
   @override
   @JsonKey()
-  final int subtotal;
+  final String subtotal;
   @override
   @JsonKey()
   final String product_name;
@@ -232,7 +232,7 @@ abstract class _ItemHistoryModel implements ItemHistoryModel {
   factory _ItemHistoryModel(
       {final int product_id,
       final int quantity,
-      final int subtotal,
+      final String subtotal,
       final String product_name,
       final String price}) = _$ItemHistoryModelImpl;
 
@@ -244,7 +244,7 @@ abstract class _ItemHistoryModel implements ItemHistoryModel {
   @override
   int get quantity;
   @override
-  int get subtotal;
+  String get subtotal;
   @override
   String get product_name;
   @override

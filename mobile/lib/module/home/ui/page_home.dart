@@ -1,3 +1,5 @@
+import 'dart:convert' show jsonEncode;
+import 'dart:developer';
 import 'dart:ui';
 
 import 'package:biyung/core/constant.dart';
@@ -6,7 +8,11 @@ import 'package:biyung/module/home/ui/home_state.dart';
 import 'package:biyung/module/keranjang/keranjang_state.dart';
 import 'package:biyung/module/menu/ui/list_menu.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:http/http.dart' as http show post;
+import 'package:shared_preferences/shared_preferences.dart'
+    show SharedPreferences;
 
 class PageHome extends StatefulHookConsumerWidget {
   const PageHome({super.key});
@@ -16,12 +22,13 @@ class PageHome extends StatefulHookConsumerWidget {
 }
 
 class _PageHomeState extends ConsumerState<PageHome> {
+  final TextEditingController _searchController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     var showDetail = ref.watch(showDetailNotifierProvider);
     var cateSelected = ref.watch(categoryProvider);
     var summary = ref.watch(summaryProvider);
-
+    var filterKata = useState("");
     var listKeranjang = ref.listen(listKeranjangProvider, (o, n) {
       if (n.isNotEmpty) {
         var q = 0;
@@ -60,6 +67,27 @@ class _PageHomeState extends ConsumerState<PageHome> {
                   ],
                 ),
                 child: TextField(
+                  onChanged: (value) =>
+                      {ref.read(searchProvider.notifier).setText(value)},
+                  onSubmitted: (value) async {
+                    final prefs = await SharedPreferences.getInstance();
+                    final token = prefs.getString('TOKEN');
+                    print('Token: $token'); // ← CETAK TOKEN KE KONSOLE DEBUG
+
+                    if (token == null) {
+                      print('Token not found');
+                      return;
+                    }
+                    await http.post(
+                      Uri.parse('http://127.0.0.1:8000/api/log-search'),
+                      headers: {
+                        'Authorization': 'Bearer $token',
+                        'Content-Type': 'application/json',
+                      },
+                      body: jsonEncode({'keyword': value}),
+                    );
+                    // Lakukan pencarian lokal jika ingin
+                  },
                   decoration: InputDecoration(
                     // prefix: Container(
                     //   alignment: Alignment.centerLeft,
@@ -90,6 +118,19 @@ class _PageHomeState extends ConsumerState<PageHome> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
+                  ElevatedButton(
+                    onPressed: () {
+                      ref
+                          .read(categoryProvider.notifier)
+                          .setCategory("recomendation");
+                    },
+                    child: Text("Direkomendasikan"),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: cateSelected == "recomendation"
+                          ? warnaSecondary
+                          : Colors.grey,
+                    ),
+                  ),
                   ElevatedButton(
                     onPressed: () {
                       ref.read(categoryProvider.notifier).setCategory("ALL");

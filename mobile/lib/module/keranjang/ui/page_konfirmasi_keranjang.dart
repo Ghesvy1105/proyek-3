@@ -1,5 +1,6 @@
 import 'package:biyung/core/API/api_service.dart';
 import 'package:biyung/core/constant.dart';
+import 'package:biyung/core/layout/bottom_nav_state.dart';
 import 'package:biyung/module/history/data/history_state.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -49,6 +50,8 @@ class PageKonfirmasiKeranjang extends ConsumerWidget {
           ),
           ElevatedButton(
             onPressed: () {
+              ref.read(CurrentNavIndexProvider.notifier).setIdx(0);
+
               context.go("/");
             },
             child: Text("Kembali Ke Home"),

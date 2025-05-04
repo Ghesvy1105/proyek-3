@@ -8,7 +8,7 @@ class ItemHistoryModel with _$ItemHistoryModel {
   factory ItemHistoryModel({
     @Default(0) int product_id,
     @Default(0) int quantity,
-    @Default(0) int subtotal,
+    @Default("") String subtotal,
     @Default("") String product_name,
     @Default("") String price,
   }) = _ItemHistoryModel;

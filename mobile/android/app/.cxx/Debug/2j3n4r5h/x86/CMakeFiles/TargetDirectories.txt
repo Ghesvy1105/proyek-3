@@ -1,0 +1,2 @@
+D:/Freelance/20-02-2025/biyung/android/app/.cxx/Debug/2j3n4r5h/x86/CMakeFiles/edit_cache.dir
+D:/Freelance/20-02-2025/biyung/android/app/.cxx/Debug/2j3n4r5h/x86/CMakeFiles/rebuild_cache.dir

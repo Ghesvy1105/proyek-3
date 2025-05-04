@@ -32,7 +32,7 @@ class _PageKeranjangState extends ConsumerState<PageKeranjang> {
     var summary = ref.watch(summaryProvider);
     var nama = useTextEditingController();
     var reque = useTextEditingController();
-    var meja = useTextEditingController();
+    var meja = useTextEditingController(text: "1");
     return Container(
       padding: EdgeInsets.all(gap),
       color: Colors.grey.shade100,
@@ -62,15 +62,24 @@ class _PageKeranjangState extends ConsumerState<PageKeranjang> {
                 fillColor: Colors.white),
           ),
           Text("No Meja"),
-          TextField(
-            controller: meja,
-            inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-            keyboardType: TextInputType.number,
-            decoration: InputDecoration(
-                border: OutlineInputBorder(),
-                filled: true,
-                fillColor: Colors.white),
-          ),
+          DropdownButtonFormField(
+              value: int.parse(meja.text == "" ? "1" : meja.text),
+              items: List.generate(20, (i) {
+                return DropdownMenuItem(
+                    value: i + 1, child: Text((i + 1).toString()));
+              }).toList(),
+              onChanged: (v) {
+                meja.text = v.toString();
+              }),
+          // TextField(
+          //   controller: meja,
+          //   inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+          //   keyboardType: TextInputType.number,
+          //   decoration: InputDecoration(
+          //       border: OutlineInputBorder(),
+          //       filled: true,
+          //       fillColor: Colors.white),
+          // ),
           SizedBox(
             height: gap * 5,
           ),

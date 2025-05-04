@@ -135,7 +135,8 @@ class _PageDetailHistoryState extends ConsumerState<PageDetailHistory> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text("${d.product_name} X ${d.quantity}"),
-                              Text("@ Rp. ${d.price.replaceAll(".00", "")}"),
+                              Text(
+                                  "@ Rp. ${d.price.toString().replaceAll(".00", "")}"),
                               Text("Rp. ${d.subtotal}")
                             ],
                           ),

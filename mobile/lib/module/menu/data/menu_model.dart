@@ -12,6 +12,7 @@ class MenuModel with _$MenuModel {
     @Default("") String image,
     @Default("") String category,
     @Default(true) bool in_stock,
+    @JsonKey(name: 'search_count') @Default(0) int searchCount, // <-- Tambahan ini
   }) = _MenuModel;
 
   factory MenuModel.fromJson(Map<String, dynamic> json) =>

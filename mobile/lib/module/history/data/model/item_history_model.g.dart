@@ -11,7 +11,7 @@ _$ItemHistoryModelImpl _$$ItemHistoryModelImplFromJson(
     _$ItemHistoryModelImpl(
       product_id: (json['product_id'] as num?)?.toInt() ?? 0,
       quantity: (json['quantity'] as num?)?.toInt() ?? 0,
-      subtotal: (json['subtotal'] as num?)?.toInt() ?? 0,
+      subtotal: json['subtotal'] as String? ?? "",
       product_name: json['product_name'] as String? ?? "",
       price: json['price'] as String? ?? "",
     );

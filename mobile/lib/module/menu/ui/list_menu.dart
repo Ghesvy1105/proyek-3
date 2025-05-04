@@ -16,6 +16,7 @@ class _ListMenuState extends ConsumerState<ListMenu> {
   Widget build(BuildContext context) {
     var listMen = ref.watch(listMenuProvider);
     var cat = ref.watch(categoryProvider);
+    var search = ref.watch(searchProvider);
     return listMen.when(
       skipLoadingOnReload: false,
       error: (error, stackTrace) => Text("Opps, Something went wrong"),
@@ -23,7 +24,8 @@ class _ListMenuState extends ConsumerState<ListMenu> {
       data: (data) {
         return ListView(
           children: [
-            for (var e in data) ...{
+            for (var e in data.where(
+                (r) => search.length > 1 ? r.name.toLowerCase().contains(search.toLowerCase()) : true)) ...{
               if (cat == "ALL" || cat == e.category) ...{
                 ItemMenu(data: e),
               }

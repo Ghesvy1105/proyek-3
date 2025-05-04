@@ -26,6 +26,8 @@ mixin _$MenuModel {
   String get image => throw _privateConstructorUsedError;
   String get category => throw _privateConstructorUsedError;
   bool get in_stock => throw _privateConstructorUsedError;
+  @JsonKey(name: 'search_count')
+  int get searchCount => throw _privateConstructorUsedError;
 
   /// Serializes this MenuModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -48,7 +50,8 @@ abstract class $MenuModelCopyWith<$Res> {
       String price,
       String image,
       String category,
-      bool in_stock});
+      bool in_stock,
+      @JsonKey(name: 'search_count') int searchCount});
 }
 
 /// @nodoc
@@ -72,6 +75,7 @@ class _$MenuModelCopyWithImpl<$Res, $Val extends MenuModel>
     Object? image = null,
     Object? category = null,
     Object? in_stock = null,
+    Object? searchCount = null,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -98,6 +102,10 @@ class _$MenuModelCopyWithImpl<$Res, $Val extends MenuModel>
           ? _value.in_stock
           : in_stock // ignore: cast_nullable_to_non_nullable
               as bool,
+      searchCount: null == searchCount
+          ? _value.searchCount
+          : searchCount // ignore: cast_nullable_to_non_nullable
+              as int,
     ) as $Val);
   }
 }
@@ -116,7 +124,8 @@ abstract class _$$MenuModelImplCopyWith<$Res>
       String price,
       String image,
       String category,
-      bool in_stock});
+      bool in_stock,
+      @JsonKey(name: 'search_count') int searchCount});
 }
 
 /// @nodoc
@@ -138,6 +147,7 @@ class __$$MenuModelImplCopyWithImpl<$Res>
     Object? image = null,
     Object? category = null,
     Object? in_stock = null,
+    Object? searchCount = null,
   }) {
     return _then(_$MenuModelImpl(
       id: null == id
@@ -164,6 +174,10 @@ class __$$MenuModelImplCopyWithImpl<$Res>
           ? _value.in_stock
           : in_stock // ignore: cast_nullable_to_non_nullable
               as bool,
+      searchCount: null == searchCount
+          ? _value.searchCount
+          : searchCount // ignore: cast_nullable_to_non_nullable
+              as int,
     ));
   }
 }
@@ -177,7 +191,8 @@ class _$MenuModelImpl implements _MenuModel {
       this.price = "",
       this.image = "",
       this.category = "",
-      this.in_stock = true});
+      this.in_stock = true,
+      @JsonKey(name: 'search_count') this.searchCount = 0});
 
   factory _$MenuModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$MenuModelImplFromJson(json);
@@ -200,10 +215,13 @@ class _$MenuModelImpl implements _MenuModel {
   @override
   @JsonKey()
   final bool in_stock;
+  @override
+  @JsonKey(name: 'search_count')
+  final int searchCount;
 
   @override
   String toString() {
-    return 'MenuModel(id: $id, name: $name, price: $price, image: $image, category: $category, in_stock: $in_stock)';
+    return 'MenuModel(id: $id, name: $name, price: $price, image: $image, category: $category, in_stock: $in_stock, searchCount: $searchCount)';
   }
 
   @override
@@ -218,13 +236,15 @@ class _$MenuModelImpl implements _MenuModel {
             (identical(other.category, category) ||
                 other.category == category) &&
             (identical(other.in_stock, in_stock) ||
-                other.in_stock == in_stock));
+                other.in_stock == in_stock) &&
+            (identical(other.searchCount, searchCount) ||
+                other.searchCount == searchCount));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, id, name, price, image, category, in_stock);
+  int get hashCode => Object.hash(
+      runtimeType, id, name, price, image, category, in_stock, searchCount);
 
   /// Create a copy of MenuModel
   /// with the given fields replaced by the non-null parameter values.
@@ -249,7 +269,8 @@ abstract class _MenuModel implements MenuModel {
       final String price,
       final String image,
       final String category,
-      final bool in_stock}) = _$MenuModelImpl;
+      final bool in_stock,
+      @JsonKey(name: 'search_count') final int searchCount}) = _$MenuModelImpl;
 
   factory _MenuModel.fromJson(Map<String, dynamic> json) =
       _$MenuModelImpl.fromJson;
@@ -266,6 +287,9 @@ abstract class _MenuModel implements MenuModel {
   String get category;
   @override
   bool get in_stock;
+  @override
+  @JsonKey(name: 'search_count')
+  int get searchCount;
 
   /// Create a copy of MenuModel
   /// with the given fields replaced by the non-null parameter values.
