@@ -1,9 +1,11 @@
 <?php
 
-use App\Http\Controllers\API\APIController;
-use App\Http\Controllers\API\AuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AiController;
+use App\Http\Controllers\API\APIController;
+use App\Http\Controllers\API\AuthController;
+// use App\Http\Controllers\SearchLogController; // Ensure this class exists in the specified namespace
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -11,6 +13,7 @@ Route::get('/user', function (Request $request) {
 
 Route::post('register', [AuthController::class, 'register']);
 Route::post('login', [AuthController::class, 'login']);
+Route::post('logout', [AuthController::class, 'logout']);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/menu', [APIController::class, 'getMenu']);
@@ -25,8 +28,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/check-out', [APIController::class, 'checkOut']);
     Route::get('/check-out/{id}/detail', [APIController::class, 'getDetailCheckout']);
 
-
     Route::get('/profile', [APIController::class, 'getProfile']);
     Route::post('/profile', [APIController::class, 'updateProfile']);
-    Route::post('logout', [AuthController::class, 'logout']);
+
+    // routes/api.php
+    Route::post('/log-search', [AiController::class, 'logSearch']);
+    Route::get('/popular-menus', [AiController::class, 'popularMenus']);
 });

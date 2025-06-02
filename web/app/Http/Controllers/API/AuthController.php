@@ -11,7 +11,8 @@ use App\Http\Requests\RegisterRequest;
 
 class AuthController extends Controller
 {
-    function register(RegisterRequest $request)
+
+    public function register(RegisterRequest $request)
     {
         $user = User::create([
             'name' => $request->name,
@@ -22,27 +23,32 @@ class AuthController extends Controller
 
         return response()->json([
             'status' => true,
-            'message' => 'User registered successfully'
-        ]);
+            'message' => 'User registered successfully',
+            'data' => $user,
+        ], 201);
     }
 
-    function login(Request $request)
+    public function login(Request $request)
     {
-        //login using email and password and role pemesan
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required',
+        ]);
+
         $user = User::where('email', $request->email)->where('role', 'pemesan')->first();
 
         if (!$user) {
             return response()->json([
                 'status' => false,
                 'message' => 'User not found'
-            ]);
+            ], 404);
         }
 
         if (!Hash::check($request->password, $user->password)) {
             return response()->json([
                 'status' => false,
                 'message' => 'Invalid credentials'
-            ]);
+            ], 401);
         }
 
         $token = $user->createToken('token-name')->plainTextToken;
@@ -52,15 +58,15 @@ class AuthController extends Controller
             'token' => $token,
             'data' => $user,
             'message' => 'User logged in successfully'
-        ]);
+        ], 200);
     }
 
     public function logout(Request $request)
     {
-        $user = auth('sanctum')->user(); // Ambil user yang sedang login
+        $user = auth('sanctum')->user(); // Retrieve the authenticated user
         if ($user) {
             $user->tokens()->delete();
-            return response()->json(['message' => 'Successfully logged out']);
+            return response()->json(['message' => 'Successfully logged out'], 200);
         }
 
         return response()->json(['message' => 'User not authenticated'], 401);

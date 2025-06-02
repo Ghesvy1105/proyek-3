@@ -120,21 +120,83 @@ class APIController extends Controller
     {
         $orders = Order::where('customer_name', Auth::user()->name)->orderBy('order_date', 'desc')->get();
 
-        return response()->json(['status' => true, 'data' => $orders]);
+        $data = $orders->map(function ($order) {
+            return [
+                'order_id' => $order->id,
+                'customer_name' => $order->customer_name,
+                'special_requests' => $order->special_requests,
+                'total_price' => $order->total_price,
+                'order_date' => $order->order_date,
+                // 'items' => json_decode($order->items), // pastikan ini array atau ubah sesuai kebutuhan
+            ];
+        });
+
+        return response()->json([
+            'status' => true,
+            'data' => $data,
+        ]);
     }
 
+    // public function getDetailCheckout($id)
+    // {
+    //     $order = Order::find($id);
+
+    //     if (!$order) {
+    //         return response()->json([
+    //             'status' => false,
+    //             'message' => 'Pesanan tidak ditemukan'
+    //         ], 404);
+    //     }
+
+    //     $items = is_array($order->items) ? $order->items : json_decode($order->items, true);
+
+    //     return response()->json([
+    //         'status' => true,
+    //         'data' => [
+    //             'order_id' => $order->id,
+    //             'customer_name' => $order->customer_name,
+    //             'table_number' => $order->table_number,
+    //             'total_price' => $order->total_price,
+    //             'order_date' => Carbon::parse($order->order_date)->format('Y-m-d, H:i'),
+    //             'is_new' => $order->is_new,
+    //             'packed' => $order->packed,
+    //             'special_requests' => $order->special_requests,
+    //             'items' => collect($items)->map(function ($item) {
+    //                 $product = Product::find($item['product_id'] ?? null);
+
+    //                 return [
+    //                     'product_id' => $product->id ?? null,
+    //                     'product_name' => $product->name ?? 'Produk tidak ditemukan',
+    //                     'quantity' => $item['quantity'] ?? 0,
+    //                     'price' => $product->price ?? 0,
+    //                     'subtotal' => ($item['quantity'] ?? 0) * ($product->price ?? 0),
+    //                 ];
+    //             })
+    //         ]
+    //     ]);
+    // }
     public function getDetailCheckout($id)
     {
         $order = Order::find($id);
-
         if (!$order) {
-            return response()->json([
-                'status' => false,
-                'message' => 'Pesanan tidak ditemukan'
-            ], 404);
+            return response()->json(['status' => false, 'message' => 'Pesanan tidak ditemukan'], 404);
         }
 
-        $items = is_array($order->items) ? $order->items : json_decode($order->items, true);
+        $itemsArray = json_decode($order->items, true);
+
+        if (!is_array($itemsArray)) {
+            return response()->json(['status' => false, 'message' => 'Format items tidak valid'], 400);
+        }
+
+        $items = collect($itemsArray)->map(function ($item) {
+            return [
+                'product_id' => $item['product_id'] ?? null,
+                'product_name' => $item['name'] ?? 'Nama produk tidak tersedia',
+                'quantity' => $item['quantity'] ?? 0,
+                'price' => isset($item['price']) ? (float)$item['price'] : 0,
+                'subtotal' => (isset($item['quantity'], $item['price']) ? $item['quantity'] * (float)$item['price'] : 0),
+            ];
+        });
 
         return response()->json([
             'status' => true,
@@ -143,21 +205,11 @@ class APIController extends Controller
                 'customer_name' => $order->customer_name,
                 'table_number' => $order->table_number,
                 'total_price' => $order->total_price,
-                'order_date' => Carbon::parse($order->order_date)->format('Y-m-d, H:i'),
+                'order_date' => $order->order_date->format('Y-m-d, H:i'),
                 'is_new' => $order->is_new,
                 'packed' => $order->packed,
                 'special_requests' => $order->special_requests,
-                'items' => collect($items)->map(function ($item) {
-                    $product = Product::find($item['product_id'] ?? null);
-
-                    return [
-                        'product_id' => $product->id ?? null,
-                        'product_name' => $product->name ?? 'Produk tidak ditemukan',
-                        'quantity' => $item['quantity'] ?? 0,
-                        'price' => $product->price ?? 0,
-                        'subtotal' => ($item['quantity'] ?? 0) * ($product->price ?? 0),
-                    ];
-                })
+                'items' => $items,
             ]
         ]);
     }
