@@ -43,6 +43,7 @@ class PageKonfirmasiKeranjang extends ConsumerWidget {
                   ref.read(historyProvider.notifier).setData(v!);
                   context.push("/detail-pesanan");
                 });
+                  print("tai");
               },
               child: Text("Lihat Detail Pesanan")),
           SizedBox(

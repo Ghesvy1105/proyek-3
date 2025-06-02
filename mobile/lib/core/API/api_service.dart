@@ -184,6 +184,7 @@ Future<void> incrementSearchCount(int id) async {
     try {
       log(id.toString());
       var res = await API.kal().get("http://127.0.0.1:8000/api/check-out/$id/detail").then((r) {
+        
         if (r.data['status']) {
           var q = HistoryModel.fromJson(r.data['data']);
           return q;
